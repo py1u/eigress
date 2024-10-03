@@ -1,17 +1,14 @@
 from flask import Flask,jsonify
-from datetime import date
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import DeclarativeBase
+from info import details
+
+class Base(DeclarativeBase):
+    pass 
+
+db = SQLAlchemy(model_class=Base)
 
 app = Flask(__name__)
-
-about_developer = {
-    'name': 'peter',
-    'role': 'software engineer',
-}
-
-about_project = {
-    'name': 'eigress',
-    'start': date.fromisoformat('2024-09-17')
-}
 
 @app.route("/flask/")
 def hello_world():
@@ -19,11 +16,11 @@ def hello_world():
 
 @app.route("/flask/project")
 def get_data():
-    return jsonify(about_project)
+    return jsonify(details.set_developer())
 
 @app.route("/flask/dev")
 def get_developer():
-    return jsonify(about_developer)
+    return jsonify(details.set_project())
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)
